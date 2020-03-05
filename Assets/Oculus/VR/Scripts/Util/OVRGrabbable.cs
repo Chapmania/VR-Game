@@ -16,11 +16,12 @@ permissions and limitations under the License.
 
 using System;
 using UnityEngine;
+using System.ComponentModel;
 
 /// <summary>
 /// An object that can be grabbed and thrown by OVRGrabber.
 /// </summary>
-public class OVRGrabbable : MonoBehaviour
+public class OVRGrabbable : MonoBehaviour, INotifyPropertyChanged
 {
     [SerializeField]
     protected bool m_allowOffhandGrab = true;
@@ -37,9 +38,24 @@ public class OVRGrabbable : MonoBehaviour
     protected Collider m_grabbedCollider = null;
     protected OVRGrabber m_grabbedBy = null;
 
-	/// <summary>
-	/// If true, the object can currently be grabbed.
-	/// </summary>
+    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler GrabChanged;
+
+    private void OnPropertyChanged(string info)
+    {
+        PropertyChangedEventHandler handler = PropertyChanged;
+        if (handler != null) handler(this, new PropertyChangedEventArgs(info));
+    }
+
+    private void OnGrabChanged(string info)
+    {
+        PropertyChangedEventHandler handler = GrabChanged;
+        if (handler != null) handler(this, new PropertyChangedEventArgs(info));
+    }
+
+    /// <summary>
+    /// If true, the object can currently be grabbed.
+    /// </summary>
     public bool allowOffhandGrab
     {
         get { return m_allowOffhandGrab; }
@@ -117,6 +133,7 @@ public class OVRGrabbable : MonoBehaviour
         m_grabbedBy = hand;
         m_grabbedCollider = grabPoint;
         gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        OnGrabChanged("");
     }
 
 	/// <summary>
@@ -130,6 +147,7 @@ public class OVRGrabbable : MonoBehaviour
         rb.angularVelocity = angularVelocity;
         m_grabbedBy = null;
         m_grabbedCollider = null;
+        OnGrabChanged("");
     }
 
     void Awake()

@@ -96,6 +96,8 @@ public class OVRCameraRig : MonoBehaviour
 	/// </summary>
 	public bool disableEyeAnchorCameras = false;
 
+    public Vector3 bobOffset;
+
 
 	protected bool _skipUpdate = false;
 	protected readonly string trackingSpaceName = "TrackingSpace";
@@ -186,6 +188,9 @@ public class OVRCameraRig : MonoBehaviour
 			centerEyeAnchor.localRotation = emulatedRotation;
 			centerEyeAnchor.localPosition = OVRManager.instance.headPoseRelativeOffsetTranslation;
 		}
+
+        //MWS* apply headbob offset
+        //centerEyeAnchor.localPosition += bobOffset;
 
 		if (!hmdPresent || monoscopic)
 		{

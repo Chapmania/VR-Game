@@ -311,7 +311,7 @@ public static class OVRInput
 			new OVRControllerLTouch(),
 			new OVRControllerRTouch(),
 			new OVRControllerRemote(),
-#endif
+#endif 
 		};
 
 		InitHapticInfo();
